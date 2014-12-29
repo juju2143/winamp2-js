@@ -43,6 +43,17 @@ SkinManager = {
         ".shade #position": "TITLEBAR.BMP",
         ".shade #position::-webkit-slider-thumb": "TITLEBAR.BMP",
         ".shade #position::-moz-range-thumb": "TITLEBAR.BMP",
+
+        // Playlist window
+        "#playlist .top .tile-x": "PLEDIT.BMP",
+        "#playlist .top .top-left": "PLEDIT.BMP",
+        "#playlist .top .title": "PLEDIT.BMP",
+        "#playlist .top .top-right": "PLEDIT.BMP",
+        "#playlist .left .tile-y": "PLEDIT.BMP",
+        "#playlist .right .tile-y": "PLEDIT.BMP",
+        "#playlist .bottom .tile-x": "PLEDIT.BMP",
+        "#playlist .bottom .bottom-left": "PLEDIT.BMP",
+        "#playlist .bottom .bottom-right": "PLEDIT.BMP",
     },
 
     // Given a file of an original Winamp WSZ file, set the current skin
