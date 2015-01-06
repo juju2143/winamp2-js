@@ -4,6 +4,8 @@ A reimplementation of Winamp 2.9 in HTML5 and Javascript.
 
 Works in modern versions of Firefox, Safari and Chrome. Untested in IE.
 
+This fork contains a few dirty hacks that adds Shoutcast/Icecast streaming support and ponies and might have broken other stuff.
+
 ## Features
 
 - Drag in local sound or skin files or load them via the "eject" button

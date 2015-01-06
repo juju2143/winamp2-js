@@ -17,6 +17,7 @@ Media = {
     autoPlay: false,
 
     init: function() {
+        this.audio = new Audio();
         // The _source node has to be recreated each time it's stopped or
         // paused, so we don't create it here.
 
@@ -95,9 +96,18 @@ Media = {
         this._context.decodeAudioData(buffer, loadAudioBuffer.bind(this), error);
     },
 
+    loadFile: function(file) {
+        this.audio.setAttribute('src', file);
+        document.body.appendChild(this.audio);
+        if(this.autoPlay) {
+            this.play(0);
+        }
+        this._draw(0);
+    },
+
     /* Properties */
     duration: function() {
-        return this._buffer.duration;
+        return this._buffer?this._buffer.duration:this.audio.duration;
     },
     timeElapsed: function() {
         return this._position;
@@ -115,7 +125,7 @@ Media = {
         return this._buffer.numberOfChannels;
     },
     sampleRate: function() {
-        return this._buffer.sampleRate;
+        return this._buffer?this._buffer.sampleRate:this.audio.sampleRate;
     },
 
     /* Actions */
@@ -139,23 +149,51 @@ Media = {
             this._playing = true;
             this._callbacks.playing();
         }
+        else
+        {
+            if(this._source === null)
+            {
+                this._source = this._context.createMediaElementSource(this.audio)
+                this._source.connect(this._analyser);
+                this._source.connect(this._chanSplit);
+            }
+            this.audio.play();
+            this._playing = true;
+        }
     },
     pause: function() {
         if(!this._playing) {
             return;
         }
-        this._silence();
-        this._updatePosition();
+        if(this._buffer)
+        {
+            this._silence();
+            this._updatePosition();
+        }
+        else
+        {
+            this.audio.pause();
+        }
     },
 
     stop: function() {
-        this._silence();
-        this._position = 0;
+        if(this._buffer)
+        {
+            this._silence();
+            this._position = 0;
+        }
+        else
+        {
+            this._silence();
+            this._position = 0;
+            this.audio.pause();
+        }
     },
 
     _silence: function() {
         if(this._source) {
-            this._source.stop(0);
+            if(this._buffer)
+                this._source.stop(0);
             this._source = null;
         }
         this._playing = false;
@@ -232,15 +270,22 @@ Media = {
     },
 
     _updatePosition: function() {
-        this._position = this._context.currentTime - this._startTime;
-        if(this._position >= this._buffer.duration && this._playing) {
-            // Idealy we could use _source.loop, but it makes updating the position tricky
-            if(this._loop) {
-                this.play(0);
-            } else {
-                this.stop();
-                this._callbacks.ended();
+        if(this._buffer)
+        {
+            this._position = this._context.currentTime - this._startTime;
+            if(this._position >= this.duration() && this._playing) {
+                // Idealy we could use _source.loop, but it makes updating the position tricky
+                if(this._loop) {
+                    this.play(0);
+                } else {
+                    this.stop();
+                    this._callbacks.ended();
+                }
             }
+        }
+        else
+        {
+            this._position = this.audio.currentTime;
         }
         return this._position;
     }

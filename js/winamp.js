@@ -456,7 +456,9 @@ Winamp = {
     // Used only for the initial load, since it must have a CORS header
     loadFromUrl: function(url, fileName) {
         this.fileName = fileName;
-        this.fileManager.bufferFromUrl(url, this._loadBuffer.bind(this));
+        //this.fileManager.bufferFromUrl(url, this._loadBuffer.bind(this));
+        this.media.loadFile(url);
+        this._setMetaData();
     },
 
     setSkinByUrl: function(url) {

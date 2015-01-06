@@ -19,11 +19,24 @@ FileManager = {
         oReq.open("GET", url, true);
         oReq.responseType = "arraybuffer";
 
-        oReq.onload = function (oEvent) {
+        oReq.onprogress = function (oEvent) {
             var arrayBuffer = oReq.response; // Note: not oReq.responseText
             bufferHandler(arrayBuffer);
         };
 
         oReq.send(null);
     }
+/*
+    streamFromUrl: function(url, bufferHandler) {
+        var oReq = new XMLHttpRequest();
+        oReq.open("GET", url, true);
+        oReq.responseType = "stream";
+
+        oReq.onprogress = function (oEvent) {
+            var arrayBuffer = oReq.response; // Note: not oReq.responseText
+            bufferHandler(arrayBuffer);
+        };
+
+        oReq.send(null);
+    }*/
 }
